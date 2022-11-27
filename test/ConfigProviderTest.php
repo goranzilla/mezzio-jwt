@@ -25,7 +25,7 @@ class ConfigProviderTest extends TestCase
     public function testProviderConfiguration(): void
     {
         $provider = new ConfigProvider();
-        $config = $provider();
+        $config   = $provider();
 
         $this->assertSame([
             'dependencies' => $provider->getDependencies(),
@@ -34,18 +34,13 @@ class ConfigProviderTest extends TestCase
 
     public function testProvideExpectedDependencies(): void
     {
-        $provider = new ConfigProvider();
+        $provider     = new ConfigProvider();
         $dependencies = $provider->getDependencies();
 
         $this->assertSame([
             'aliases'    => [
                 ListenerProviderInterface::class => AttachableListenerProvider::class,
             ],
-//            'delegators' => [
-//                Application::class => [
-//                    RouterDelegator::class,
-//                ],
-//            ],
             'invokables' => [
                 AttachableListenerProvider::class => AttachableListenerProvider::class,
             ],

@@ -16,7 +16,6 @@ use GoranZilla\MezzioJwt\Provider\Lcobucci\JwsProviderFactory;
 use GoranZilla\MezzioJwt\Signer\Lcobucci\SignerFactory;
 use GoranZilla\MezzioJwt\Signer\Lcobucci\SignerInterface;
 use Lcobucci\JWT\Configuration;
-use Mezzio\Application;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 
@@ -49,11 +48,6 @@ class ConfigProvider
             'aliases'    => [
                 ListenerProviderInterface::class => AttachableListenerProvider::class,
             ],
-//            'delegators' => [
-//                Application::class => [
-//                    RouterDelegator::class,
-//                ],
-//            ],
             'invokables' => [
                 AttachableListenerProvider::class => AttachableListenerProvider::class,
             ],

@@ -31,15 +31,12 @@ class SignerFactory
 
     private function getSignerForAlgorithm(string $signatureAlgorithm): \Lcobucci\JWT\Signer
     {
-        $signerMap = Algorithm::cases();
-
-        if (! isset($signerMap[$signatureAlgorithm])) {
+        $signerClass = Algorithm::tryFrom($signatureAlgorithm)->signer();
+        if ($signerClass === null) {
             throw new InvalidArgumentException(
                 sprintf('The algorithm "%s" is not supported by %s', $signatureAlgorithm, self::class)
             );
         }
-
-        $signerClass = $signerMap[$signatureAlgorithm];
 
         if (is_subclass_of($signerClass, Ecdsa::class) && method_exists($signerClass, 'create')) {
             return $signerClass::create();
