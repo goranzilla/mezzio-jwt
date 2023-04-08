@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace GoranZilla\MezzioJwt;
 
+use GoranZilla\MezzioJwt\Configuration\ConfigurationInterface;
+use GoranZilla\MezzioJwt\Configuration\LcobucciConfiguration;
+use GoranZilla\MezzioJwt\Configuration\LcobucciConfigurationFactory;
 use GoranZilla\MezzioJwt\Encoder\JwtEncoderInterface;
 use GoranZilla\MezzioJwt\Encoder\LcobucciJwtEncoderFactory;
 use GoranZilla\MezzioJwt\EventDispatcher\EventDispatcherFactory;
@@ -11,11 +14,9 @@ use GoranZilla\MezzioJwt\ListenerProvider\AttachableListenerProvider;
 use GoranZilla\MezzioJwt\Middleware\Encoder\JwtEncoderMiddleware;
 use GoranZilla\MezzioJwt\Middleware\Encoder\JwtEncoderMiddlewareFactory;
 use GoranZilla\MezzioJwt\Provider\JwsProviderInterface;
-use GoranZilla\MezzioJwt\Provider\Lcobucci\ConfigurationBuilderFactory;
 use GoranZilla\MezzioJwt\Provider\Lcobucci\JwsProviderFactory;
 use GoranZilla\MezzioJwt\Signer\Lcobucci\SignerFactory;
 use GoranZilla\MezzioJwt\Signer\Lcobucci\SignerInterface;
-use Lcobucci\JWT\Configuration;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 
@@ -45,9 +46,6 @@ class ConfigProvider
     public function getDependencies(): array
     {
         return [
-            'aliases'    => [
-                ListenerProviderInterface::class => AttachableListenerProvider::class,
-            ],
             'invokables' => [
                 AttachableListenerProvider::class => AttachableListenerProvider::class,
             ],
@@ -57,7 +55,11 @@ class ConfigProvider
                 JwtEncoderMiddleware::class     => JwtEncoderMiddlewareFactory::class,
                 EventDispatcherInterface::class => EventDispatcherFactory::class,
                 SignerInterface::class          => SignerFactory::class,
-                Configuration::class            => ConfigurationBuilderFactory::class,
+                LcobucciConfiguration::class    => LcobucciConfigurationFactory::class,
+            ],
+            'aliases'    => [
+                ConfigurationInterface::class    => LcobucciConfiguration::class,
+                ListenerProviderInterface::class => AttachableListenerProvider::class,
             ],
         ];
     }
