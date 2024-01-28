@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GoranZilla\MezzioJwt\Provider\Lcobucci;
 
+use GoranZilla\MezzioJwt\Configuration\ConfigurationInterface;
 use GoranZilla\MezzioJwt\Exception\JwtBuilderException;
 use GoranZilla\MezzioJwt\Provider\JwsProviderInterface;
 use Lcobucci\JWT\ClaimsFormatter;
@@ -16,10 +17,14 @@ class JwsProviderFactory
     public function __invoke(ContainerInterface $container, string $requestedName): JwsProviderInterface
     {
         $config = $container->get('config');
-        Assert::keyExists($config, 'jwt', 'JWT settings are not configured properly in *.global.php namespace.');
+        Assert::keyExists(
+            $config,
+            ConfigurationInterface::CONFIGURATION_IDENTIFIER,
+            'JWT settings are not configured properly in *.global.php namespace.',
+        );
 
         $claimsFormat = $config['jwt']['claims_formatter'] ?? null;
-        if ($claimsFormat !== null && ! $claimsFormat instanceof ClaimsFormatter) {
+        if ($claimsFormat !== null && !$claimsFormat instanceof ClaimsFormatter) {
             throw JwtBuilderException::claimsFormatException();
         }
 
